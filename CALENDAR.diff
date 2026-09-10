@@ -1,0 +1,241 @@
+--- red2_range.c
++++ red2_calendar.c
+@@ -16,7 +16,7 @@
+ #define _POSIX_C_SOURCE 200809L
+ #endif
+ 
+-#include "red2_v33.h"
++#include "red2_v34.h"
+ 
+ _Static_assert(sizeof(size_t) >= 8, "RED2 range extension requires a 64-bit build");
+ _Static_assert(RED2_RANGE_MAX_N <= UINT64_C(10000000000000),
+@@ -1053,11 +1053,50 @@
+     st->phase = phase;
+ }
+ 
+-red2_v33_result red2_v33_sieve(
++
++/* Bounded calendar memory is a resource limit, not a CPU cache-size guess. */
++#ifndef RED2_CALENDAR_MAX_BYTES
++#define RED2_CALENDAR_MAX_BYTES (4u*1024u*1024u)
++#endif
++#ifndef RED2_CALENDAR_CHECKS
++#define RED2_CALENDAR_CHECKS 0
++#endif
++static inline unsigned calendar_first_bit(uint64_t bits) {
++#ifdef _MSC_VER
++    unsigned long index;_BitScanForward64(&index,bits);return (unsigned)index;
++#else
++    return (unsigned)__builtin_ctzll(bits);
++#endif
++}
++static inline uint64_t calendar_product_block(const closure_plan *cp,size_t row,uint32_t cursor) {
++    uint32_t q=cp->packed[cursor];
++    uint64_t tag=((uint64_t)cp->primes[row]<<8)*(uint64_t)(q>>3)+cp->entries[row-cp->first][q&7u];
++    return tag>>8;
++}
++static inline uint64_t calendar_segment(uint64_t block,uint64_t segment_blocks,unsigned shift) {
++    return shift<64u?block>>shift:block/segment_blocks;
++}
++static inline void calendar_insert(uint64_t *calendar,size_t words,uint32_t slots,
++    uint64_t current_seg,uint64_t next_seg,size_t row) {
++    if(next_seg<current_seg || next_seg-current_seg>=slots) {
++        fputs("calendar horizon invariant failed\n",stderr);exit(2);
++    }
++    size_t cell=(size_t)(next_seg&(slots-1u))*words+row/64u;
++    uint64_t bit=UINT64_C(1)<<(row%64u);
++    if(RED2_CALENDAR_CHECKS && (calendar[cell]&bit)) {
++        fputs("duplicate calendar row\n",stderr);exit(2);
++    }
++    calendar[cell]|=bit;
++}
++
++red2_v33_result red2_v34_sieve(
+     uint64_t limit, int threads, size_t segment_bytes, int presieve_max, uint32_t dense_cutoff, int layer_max, int plate_batch,
+-    unsigned frontier_multiplier, red2_v33_segment_fn consume, void *context
++    unsigned frontier_multiplier, red2_v33_segment_fn consume, void *context,
++    unsigned schedule_factor, red2_v34_stats *stats
+ ) {
+     red2_v33_result out = {0};
++    if(stats)memset(stats,0,sizeof(*stats));
++    if(schedule_factor>64u){fputs("schedule factor outside 0..64\n",stderr);exit(2);}
+     if(limit>RED2_RANGE_MAX_N || segment_bytes>8192u*1024u || threads>1024) {
+         fputs("RED2 v0.33 range extension: N<=1e13, segment<=8192 KiB, threads<=1024\n",stderr);
+         exit(2);
+@@ -1196,11 +1235,42 @@
+     size_t bucket_span_bytes = far_count ? max_local_segments * sizeof(bucket_span) : 0u;
+     size_t page_bytes = far_count ? page_cap_max * sizeof(bucket_page) : 0u;
+     size_t residual_rows = closure.end - closure.first;
++    size_t scheduled_first=closure.end;
++    uint64_t cutoff64=(uint64_t)segment_bytes*schedule_factor;
++    uint32_t calendar_cutoff=cutoff64>UINT32_MAX?UINT32_MAX:(uint32_t)cutoff64;
++    if(schedule_factor && residual_rows) {
++        scheduled_first=upper_bound_prime32(closure.primes,closure.end,calendar_cutoff);
++        if(scheduled_first<closure.first)scheduled_first=closure.first;
++    }
++    size_t scheduled_rows=closure.end-scheduled_first;
++    unsigned calendar_shift=(segment_blocks&(segment_blocks-1u))?64u:calendar_first_bit(segment_blocks);
++    uint32_t max_cofactor_gap=0,calendar_slots=1;
++    size_t calendar_words=(scheduled_rows+63u)/64u,calendar_bytes=0;
++    int calendar_fallback=0;
++    if(scheduled_rows) {
++        for(size_t i=1;i<closure.aux_prime_count;i++) {
++            uint32_t gap=closure.primes[i]-closure.primes[i-1u];
++            if(gap>max_cofactor_gap)max_cofactor_gap=gap;
++        }
++        /* Consecutive real products advance by p*(next_q-q).
++           +3 covers both segment alignment and integer division rounding. */
++        uint64_t needed=(sqrt_limit*(uint64_t)max_cofactor_gap)/(30u*segment_blocks)+3u;
++        while(calendar_slots<needed && calendar_slots<=UINT32_MAX/2u)calendar_slots*=2u;
++        if(calendar_slots<needed || calendar_words>RED2_CALENDAR_MAX_BYTES/sizeof(uint64_t)/calendar_slots) {
++            calendar_fallback=1;scheduled_first=closure.end;scheduled_rows=0;calendar_words=0;calendar_slots=1;
++        } else calendar_bytes=(size_t)calendar_slots*calendar_words*sizeof(uint64_t);
++    }
++    if(stats) {
++        stats->direct_rows=scheduled_first-closure.first;stats->scheduled_rows=scheduled_rows;
++        stats->calendar_bytes_per_worker=calendar_bytes;stats->ring_slots=calendar_slots;
++        stats->max_cofactor_gap=max_cofactor_gap;stats->cutoff=calendar_cutoff;
++        stats->schedule_factor=schedule_factor;stats->memory_fallback=calendar_fallback;
++    }
+     size_t auxiliary_live = (2u * closure.aux_prime_count + 8u) * sizeof(uint32_t) +
+         residual_rows * sizeof(*closure.entries);
+     size_t runtime_peak_bytes = shared_bytes + auxiliary_live + (size_t)threads *
+         (segment_bytes + state_bytes + resident_bytes + far_event_bytes + bucket_span_bytes + page_bytes +
+-         residual_rows * sizeof(uint32_t));
++         residual_rows * sizeof(uint32_t) + calendar_bytes);
+     size_t closure_peak_bytes = shared_bytes + closure.aux_peak_bytes;
+     if(shared_bytes + auxiliary_live > closure_peak_bytes) closure_peak_bytes=shared_bytes + auxiliary_live;
+     out.estimated_peak_bytes = runtime_peak_bytes > closure_peak_bytes ? runtime_peak_bytes : closure_peak_bytes;
+@@ -1209,6 +1279,7 @@
+     out.prepare_seconds = prep1 - prep0;
+ 
+     uint64_t candidate_count = 0;
++    uint64_t direct_visits=0,scheduled_visits=0;
+     int allocation_failed = 0;
+     out.dense_tile_bytes=16384u;
+     /* Four independently initialized, contiguous territories per requested
+@@ -1221,7 +1292,7 @@
+     double work0 = red2_v33_now_seconds();
+ 
+ #ifdef _OPENMP
+-#pragma omp parallel for num_threads(threads) schedule(dynamic,1) reduction(+:candidate_count)
++#pragma omp parallel for num_threads(threads) schedule(dynamic,1) reduction(+:candidate_count,direct_visits,scheduled_visits)
+ #endif
+     for (int task = 0; task < tasks; ++task) {
+ #ifdef _OPENMP
+@@ -1247,6 +1318,8 @@
+             if(qmin<p0) qmin=p0;
+             q_cursor[i-closure.first]=(uint32_t)upper_bound_prime32(closure.primes,closure.aux_prime_count,qmin-1u);
+         }
++        uint64_t *calendar=calendar_bytes?calloc(1,calendar_bytes):NULL;
++        if(calendar_bytes&&!calendar){fputs("calendar allocation failed\n",stderr);exit(2);}
+         uint8_t *buf = (uint8_t *)aligned_malloc64(segment_bytes);
+         cycle_state *state = dense_count ?
+             (cycle_state *)aligned_malloc64(dense_count * sizeof(cycle_state)) : NULL;
+@@ -1353,6 +1426,7 @@
+ 
+             size_t active_resident = 0u;
+             size_t active_products = closure.first;
++            size_t calendar_active=scheduled_first;
+ 
+             for (uint64_t seg = seg_begin; seg < seg_end && !thread_failed; ++seg) {
+                 uint64_t block_lo = seg * segment_blocks;
+@@ -1485,7 +1559,9 @@
+                 while(active_products<closure.end &&
+                       (uint64_t)closure.primes[active_products]*closure.primes[active_products]<block_hi*30u)
+                     ++active_products;
+-                for (size_t i=closure.first; i<active_products; ++i) {
++                size_t direct_end=active_products<scheduled_first?active_products:scheduled_first;
++                direct_visits+=(uint64_t)(direct_end-closure.first);
++                for (size_t i=closure.first; i<direct_end; ++i) {
+                     uint8_t *restrict marks=buf;
+                     const uint32_t *restrict cofactors=closure.packed;
+                     uint64_t p0=closure.primes[i];
+@@ -1526,6 +1602,58 @@
+                     }
+                     q_cursor[i-closure.first]=(uint32_t)j;
+                 }
++
++                if(scheduled_rows) {
++                    /* Activate each queued row once per territory. Its initial
++                       cursor already respects both p^2 and the territory start. */
++                    while(calendar_active<active_products) {
++                        size_t row=calendar_active++;
++                        uint32_t cursor=q_cursor[row-closure.first];
++                        if(cursor>=closure.aux_prime_count)continue;
++                        uint64_t next=calendar_product_block(&closure,row,cursor);
++                        if(next<territory_block_end)
++                            calendar_insert(calendar,calendar_words,calendar_slots,seg,calendar_segment(next,segment_blocks,calendar_shift),row-scheduled_first);
++                    }
++                    uint64_t *due=calendar+(size_t)(seg&(calendar_slots-1u))*calendar_words;
++                    for(size_t word=0;word<calendar_words;word++) {
++                        uint64_t bits=due[word];due[word]=0;
++                        scheduled_visits+=popcount64(bits);
++                        while(bits) {
++                            unsigned bit=calendar_first_bit(bits);bits&=bits-1u;
++                            size_t i=scheduled_first+word*64u+bit;
++                            if(RED2_CALENDAR_CHECKS) {
++                                uint64_t first=calendar_product_block(&closure,i,q_cursor[i-closure.first]);
++                                if(i>=active_products || first<block_lo || first>=block_hi) {
++                                    fputs("calendar row not due in segment\n",stderr);exit(2);
++                                }
++                            }
++                            uint8_t *restrict marks=buf;
++                            const uint32_t *restrict cofactors=closure.packed;
++                            const uint32_t *restrict entries=closure.entries[i-closure.first];
++                            const uint64_t stride=(uint64_t)closure.primes[i]<<8;
++                            const uint64_t tagged_end=block_hi<<8;
++                            size_t j=q_cursor[i-closure.first];
++                            uint32_t q=cofactors[j];
++                            uint64_t tag=stride*(uint64_t)(q>>3)+entries[q&7u];
++                            /* A calendar event certifies at least one hit.
++                               Sparse rows do not need a fourth-product probe. */
++                            do {
++                                marks[(tag>>8)-block_lo]&=(uint8_t)tag;
++                                q=cofactors[++j];
++                                tag=stride*(uint64_t)(q>>3)+entries[q&7u];
++                            } while(tag<tagged_end);
++                            q_cursor[i-closure.first]=(uint32_t)j;
++                            if(j<closure.aux_prime_count) {
++                                uint64_t next=tag>>8;
++                                if(next<territory_block_end) {
++                                    uint64_t next_seg=calendar_segment(next,segment_blocks,calendar_shift);
++                                    if(next_seg<=seg){fputs("calendar failed to advance\n",stderr);exit(2);}
++                                    calendar_insert(calendar,calendar_words,calendar_slots,seg,next_seg,i-scheduled_first);
++                                }
++                            }
++                        }
++                    }
++                }
+                 if (consume) consume(block_lo,buf,blocks_here,context);
+                 candidate_count += popcount_bytes(buf, blocks_here);
+             }
+@@ -1538,6 +1666,7 @@
+         aligned_free64(state);
+         aligned_free64(buf);
+         free(q_cursor);
++        free(calendar);
+ 
+         if (thread_failed) {
+ #ifdef _OPENMP
+@@ -1549,6 +1678,7 @@
+ 
+     double work1 = red2_v33_now_seconds();
+     out.work_seconds = work1 - work0;
++    if(stats){stats->direct_row_visits=direct_visits;stats->scheduled_row_visits=scheduled_visits;}
+ 
+     if (allocation_failed) {
+         free_cycles(&cycles);
+@@ -1575,6 +1705,12 @@
+     return out;
+ }
+ 
++red2_v33_result red2_v33_sieve(
++    uint64_t n,int threads,size_t segment,int presieve,uint32_t dense,int layer,int batch,
++    unsigned frontier,red2_v33_segment_fn consume,void *context) {
++    return red2_v34_sieve(n,threads,segment,presieve,dense,layer,batch,frontier,consume,context,2,NULL);
++}
++
+ red2_v33_result red2_v33_count(uint64_t limit,int threads,size_t segment_bytes,int presieve_max,uint32_t dense_cutoff,int layer_max,int plate_batch) {
+     return red2_v33_sieve(limit,threads,segment_bytes,presieve_max,dense_cutoff,layer_max,plate_batch,1,NULL,NULL);
+ }
