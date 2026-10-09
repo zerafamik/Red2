@@ -1,0 +1,7 @@
+2026-10-08T18:10:52Z
+MINGW64_NT-10.0-26200 DESKTOP-HRL92K9 3.6.10-8fbd9808.x86_64 2026-08-13 11:15 UTC x86_64 Msys
+limit=100000000000 threads=12 segment_kib=512 pairs=2 reference=primesieve schedule_factor=2 frontier_multiplier=1
+OMP_DYNAMIC=false OMP_PROC_BIND=false OMP_PLACES=unset OMP_THREAD_LIMIT=unset RED2_BUILD_MODE=native
+model name	: Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz
+MemTotal:       16688316 kB
+cofactor_mode=auto dense_tile_kib=0 calendar_bound=tight

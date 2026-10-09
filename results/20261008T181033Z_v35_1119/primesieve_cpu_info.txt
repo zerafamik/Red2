@@ -1,0 +1,10 @@
+Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz
+Logical CPU cores: 12
+Has AVX512 BW: no
+Has AVX512 VBMI2: no
+L1 cache size: 32 KiB
+L2 cache size: 256 KiB
+L3 cache size: 12 MiB
+L1 cache sharing: 2 threads
+L2 cache sharing: 2 threads
+L3 cache sharing: 12 threads

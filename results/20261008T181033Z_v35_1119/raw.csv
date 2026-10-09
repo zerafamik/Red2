@@ -1,0 +1,7 @@
+phase,pair,position,engine,seconds,count,segment_kib
+warmup,-1,1,v35,2.534370200,4118054813,512
+warmup,-1,2,primesieve,2.706,4118054813,128
+measured,0,1,v35,2.354009000,4118054813,512
+measured,0,2,primesieve,2.804,4118054813,128
+measured,1,1,primesieve,2.731,4118054813,128
+measured,1,2,v35,2.339853900,4118054813,512

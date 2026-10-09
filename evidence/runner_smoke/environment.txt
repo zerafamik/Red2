@@ -1,0 +1,8 @@
+2026-09-10T02:29:45Z
+Linux localhost 6.18.35 #1 SMP Mon Aug 31 18:10:37 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+limit=100000000 threads=2 segment_kib=512 pairs=2 reference=v34 schedule_factor=2 frontier_multiplier=1
+OMP_DYNAMIC=false OMP_PROC_BIND=false OMP_PLACES=unset OMP_THREAD_LIMIT=unset RED2_BUILD_MODE=native
+model name	: AMD EPYC 9V74 80-Core Processor
+MemTotal:       22568272 kB
+MemAvailable:   21577752 kB
+cofactor_mode=auto dense_tile_kib=0 calendar_bound=tight

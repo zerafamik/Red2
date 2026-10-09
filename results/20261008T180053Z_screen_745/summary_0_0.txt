@@ -1,0 +1,4 @@
+MEDIANS v35=1.208929400 v34=1.207112500 seconds
+PAIRED v35_over_v34=1.001506073 time_reduction_pct=-0.150607 v35_wins=0/2
+Warmups excluded; all measured runs retained; separate processes and internal elapsed times.
+This is a configuration-specific experiment, not a universal speed or confidence-interval claim.

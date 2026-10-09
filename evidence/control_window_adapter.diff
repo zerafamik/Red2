@@ -1,0 +1,51 @@
+--- red2_calendar.c
++++ red2_v34_window.c
+@@ -92,6 +92,11 @@
+  * Keep what survives.
+  */
+ 
++
++#ifdef RED2_BENCH_WINDOW
++static uint64_t bench_first_segment=0,bench_segment_count=0;
++#endif
++
+ static const uint8_t W30_RES[8] = {1, 7, 11, 13, 17, 19, 23, 29};
+ static const int8_t W30_LANE[30] = {
+     -1, 0,-1,-1,-1,-1,-1, 1,-1,-1,
+@@ -1172,6 +1177,16 @@
+     uint64_t total_blocks = limit / 30u + 1u;
+     uint64_t segment_blocks = (uint64_t)segment_bytes; /* 1 W30 block == 1 byte */
+     uint64_t total_segments = (total_blocks + segment_blocks - 1u) / segment_blocks;
++    uint64_t schedule_first=0,schedule_count=total_segments;
++#ifdef RED2_BENCH_WINDOW
++    if(bench_segment_count) {
++        if(bench_first_segment>=total_segments){fputs("bad window\n",stderr);exit(2);}
++        schedule_first=bench_first_segment;
++        schedule_count=bench_segment_count;
++        if(schedule_count>total_segments-schedule_first)schedule_count=total_segments-schedule_first;
++    }
++#endif
++
+ 
+     if ((uint64_t)threads > total_segments) threads = (int)total_segments;
+     if (threads < 1) threads = 1;
+@@ -1287,7 +1302,7 @@
+        Each territory retains increasing segments and carried sieve cursors.
+        One-thread enumeration remains one ordered territory. */
+     int tasks = threads > 1 ? threads * 4 : 1;
+-    if ((uint64_t)tasks > total_segments) tasks = (int)total_segments;
++    if ((uint64_t)tasks > schedule_count) tasks = (int)schedule_count;
+     out.task_count=tasks;
+     double work0 = red2_v33_now_seconds();
+ 
+@@ -1304,8 +1319,8 @@
+         /* Auxiliary limit < 464187025 for N<=1e13; indices fit uint32_t. */
+         uint32_t *q_cursor = residual_count ? malloc(residual_count * sizeof(uint32_t)) : NULL;
+         if (residual_count && !q_cursor) { fputs("residual allocation failed\n",stderr); exit(2); }
+-        uint64_t seg_begin = total_segments * (uint64_t)task / (uint64_t)tasks;
+-        uint64_t seg_end   = total_segments * (uint64_t)(task + 1) / (uint64_t)tasks;
++        uint64_t seg_begin = schedule_first + schedule_count * (uint64_t)task / (uint64_t)tasks;
++        uint64_t seg_end   = schedule_first + schedule_count * (uint64_t)(task + 1) / (uint64_t)tasks;
+         uint64_t local_segments64 = seg_end - seg_begin;
+         uint32_t local_segments = (uint32_t)local_segments64;
+         uint64_t territory_block_begin = seg_begin * segment_blocks;

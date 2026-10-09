@@ -1,0 +1,24 @@
+{
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "cpu": "model name\t: AMD EPYC 9V74 80-Core Processor",
+  "cpu_max": "800000 100000",
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "flags": "-O3 -march=native -std=c11 -DNDEBUG -Wall -Wextra -Wpedantic -fopenmp",
+  "OMP_DYNAMIC": "false",
+  "OMP_PROC_BIND": "false",
+  "OMP_PLACES": "unset",
+  "started_utc": "2026-09-10T02:29:52Z",
+  "hashes": {
+    "red2_block.c": "6fd64921f439b3efff707302488259173fd05255d4fdfffbe718c7ead8e30cad",
+    "red2_block_cli.c": "563680ab78afab6f928fb51153811cbca993b5f82d538cb42acd206a2e0da6ff",
+    "red2_v35.h": "c68745062d74285956b5dd3dbd79c2ce583c11a8dafc08f10d2d4cbfc2cff71a",
+    "red2_calendar.c": "ffadb44f037465931abc28cec4b393e87580ce5d315883df684560b7602fce80",
+    "red2_calendar_cli.c": "77689d9bf42cb221e1f04a5acdea9674f5e6a40fd67fb435c126789d4ee413e9",
+    "red2_v34_window.c": "2e6294252c5e31f25eb09a3ba5258fa6ed18e32575048952d98138e157fc590e",
+    "screen_window.c": "736d148faef8b01c4a285462f2bccfb6694b14152ed95b992806d1dd5333b7c2",
+    "red2_v34": "c9fb54417d166ec224a76010900e115c1f1926fc654955f805b84f2445db45c9",
+    "red2_v35": "34c129d3edcae687d0c46c01120722b5c7d3200d0946984a3ef49bba35ebf4b6",
+    "window_v34": "fac4db3f4560d5b972d9a9207b10512a3c0c3bfd7ca3c4bd5ba4cbe72da63294",
+    "window_v35": "08e2c9bb076141d793a8cdee9942bb9b6ecdcd6362446d2e8605e74f6668c933"
+  }
+}

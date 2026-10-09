@@ -1,0 +1,73 @@
+{
+  "zip_sha256": "76794bf3759b32091908cb420345286fbb35d455d530ee3b65e8f64d8dd7ee8c",
+  "source_and_script_matches": [
+    "red2_range.c",
+    "red2_range_cli.c",
+    "red2_v33.h",
+    "red2_profiled.c",
+    "red2_profile_cli.c",
+    "validate_v33.c",
+    "validate_10t.c",
+    "build_profile.sh",
+    "run_profile_10t.sh",
+    "inspect_profile.awk"
+  ],
+  "reported_hash_checks": {
+    "package_check.txt": 51,
+    "postrun_check.txt": 15
+  },
+  "raw_run_count": 4,
+  "oracle_all_64_segments_at_1b": "pass",
+  "profile_accounting_replayed": "pass",
+  "session_seconds": 1221.0,
+  "results": {
+    "1000000000000": {
+      "original_total": 31.7187897,
+      "profiled_total": 30.5537674,
+      "work_wall": 29.8534163,
+      "worker_interval_seconds": 349.7703025,
+      "stage_share_pct": {
+        "presieve": 5.374234452051571,
+        "dense": 49.67135370219144,
+        "products": 43.932506905728495,
+        "popcount": 0.8007344763067757,
+        "sampling": 0.12265475282882254,
+        "init": 0.09305907267527376
+      },
+      "sample_empty_pct": 4.686720805347338,
+      "sample_visits": 27783093,
+      "sample_marks": 197111271,
+      "sample_four_way_mark_pct": 78.58049477038784,
+      "largest_band_empty_pct": 22.650589932089655,
+      "exact_row_visits": 3342769123,
+      "exact_advances": 23729370365,
+      "unoccupied_worker_capacity_pct": 2.3645236597818355,
+      "idealized_balance_only_saving_seconds": 0.7058910916666647,
+      "max_final_join_gap_seconds": 1.4033489999999986
+    },
+    "10000000000000": {
+      "original_total": 565.4202256,
+      "profiled_total": 562.4028068,
+      "work_wall": 560.2156911,
+      "worker_interval_seconds": 6415.1128235,
+      "stage_share_pct": {
+        "presieve": 3.6112364329955247,
+        "dense": 42.148516889603215,
+        "products": 53.515705482603636,
+        "popcount": 0.5127255062375443,
+        "sampling": 0.19271496916955194,
+        "init": 0.016804490110461423
+      },
+      "sample_empty_pct": 30.58248159823755,
+      "sample_visits": 764871030,
+      "sample_marks": 1731419703,
+      "sample_four_way_mark_pct": 55.12626489962035,
+      "largest_band_empty_pct": 66.43619038810525,
+      "exact_row_visits": 97407590242,
+      "exact_advances": 220518863542,
+      "unoccupied_worker_capacity_pct": 4.573766178884046,
+      "idealized_balance_only_saving_seconds": 25.62295580833336,
+      "max_final_join_gap_seconds": 69.09734749999996
+    }
+  }
+}

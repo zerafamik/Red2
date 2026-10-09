@@ -1,0 +1,116 @@
+VALIDATION N=10000000000000 threads=8 segment_kib=512 oracle_root=3162277 selected_windows=103 frontier_multiplier=1
+CHECK_PROGRESS completed_segments=63578/635783
+CHECK_PROGRESS completed_segments=127156/635783
+CHECK_PROGRESS completed_segments=190734/635783
+CHECK_PROGRESS completed_segments=254312/635783
+CHECK_PROGRESS completed_segments=317890/635783
+CHECK_PROGRESS completed_segments=381468/635783
+CHECK_PROGRESS completed_segments=445046/635783
+CHECK_PROGRESS completed_segments=508624/635783
+CHECK_PROGRESS completed_segments=572202/635783
+CHECK_PROGRESS completed_segments=635780/635783
+CHECK_PROGRESS completed_segments=635783/635783
+WINDOW segment=0 first_block=0 bytes=524288 bad=0 visits=1
+WINDOW segment=1 first_block=524288 bytes=524288 bad=0 visits=1
+WINDOW segment=28 first_block=14680064 bytes=524288 bad=0 visits=1
+WINDOW segment=29 first_block=15204352 bytes=524288 bad=0 visits=1
+WINDOW segment=30 first_block=15728640 bytes=524288 bad=0 visits=1
+WINDOW segment=19867 first_block=10416029696 bytes=524288 bad=0 visits=1
+WINDOW segment=19868 first_block=10416553984 bytes=524288 bad=0 visits=1
+WINDOW segment=19869 first_block=10417078272 bytes=524288 bad=0 visits=1
+WINDOW segment=39735 first_block=20832583680 bytes=524288 bad=0 visits=1
+WINDOW segment=39736 first_block=20833107968 bytes=524288 bad=0 visits=1
+WINDOW segment=39737 first_block=20833632256 bytes=524288 bad=0 visits=1
+WINDOW segment=59603 first_block=31249137664 bytes=524288 bad=0 visits=1
+WINDOW segment=59604 first_block=31249661952 bytes=524288 bad=0 visits=1
+WINDOW segment=59605 first_block=31250186240 bytes=524288 bad=0 visits=1
+WINDOW segment=79471 first_block=41665691648 bytes=524288 bad=0 visits=1
+WINDOW segment=79472 first_block=41666215936 bytes=524288 bad=0 visits=1
+WINDOW segment=79473 first_block=41666740224 bytes=524288 bad=0 visits=1
+WINDOW segment=99340 first_block=52082769920 bytes=524288 bad=0 visits=1
+WINDOW segment=99341 first_block=52083294208 bytes=524288 bad=0 visits=1
+WINDOW segment=99342 first_block=52083818496 bytes=524288 bad=0 visits=1
+WINDOW segment=119208 first_block=62499323904 bytes=524288 bad=0 visits=1
+WINDOW segment=119209 first_block=62499848192 bytes=524288 bad=0 visits=1
+WINDOW segment=119210 first_block=62500372480 bytes=524288 bad=0 visits=1
+WINDOW segment=139076 first_block=72915877888 bytes=524288 bad=0 visits=1
+WINDOW segment=139077 first_block=72916402176 bytes=524288 bad=0 visits=1
+WINDOW segment=139078 first_block=72916926464 bytes=524288 bad=0 visits=1
+WINDOW segment=145343 first_block=76201590784 bytes=524288 bad=0 visits=1
+WINDOW segment=145344 first_block=76202115072 bytes=524288 bad=0 visits=1
+WINDOW segment=145345 first_block=76202639360 bytes=524288 bad=0 visits=1
+WINDOW segment=158944 first_block=83332431872 bytes=524288 bad=0 visits=1
+WINDOW segment=158945 first_block=83332956160 bytes=524288 bad=0 visits=1
+WINDOW segment=158946 first_block=83333480448 bytes=524288 bad=0 visits=1
+WINDOW segment=178812 first_block=93748985856 bytes=524288 bad=0 visits=1
+WINDOW segment=178813 first_block=93749510144 bytes=524288 bad=0 visits=1
+WINDOW segment=178814 first_block=93750034432 bytes=524288 bad=0 visits=1
+WINDOW segment=198681 first_block=104166064128 bytes=524288 bad=0 visits=1
+WINDOW segment=198682 first_block=104166588416 bytes=524288 bad=0 visits=1
+WINDOW segment=198683 first_block=104167112704 bytes=524288 bad=0 visits=1
+WINDOW segment=218549 first_block=114582618112 bytes=524288 bad=0 visits=1
+WINDOW segment=218550 first_block=114583142400 bytes=524288 bad=0 visits=1
+WINDOW segment=218551 first_block=114583666688 bytes=524288 bad=0 visits=1
+WINDOW segment=238417 first_block=124999172096 bytes=524288 bad=0 visits=1
+WINDOW segment=238418 first_block=124999696384 bytes=524288 bad=0 visits=1
+WINDOW segment=238419 first_block=125000220672 bytes=524288 bad=0 visits=1
+WINDOW segment=258285 first_block=135415726080 bytes=524288 bad=0 visits=1
+WINDOW segment=258286 first_block=135416250368 bytes=524288 bad=0 visits=1
+WINDOW segment=258287 first_block=135416774656 bytes=524288 bad=0 visits=1
+WINDOW segment=278154 first_block=145832804352 bytes=524288 bad=0 visits=1
+WINDOW segment=278155 first_block=145833328640 bytes=524288 bad=0 visits=1
+WINDOW segment=278156 first_block=145833852928 bytes=524288 bad=0 visits=1
+WINDOW segment=298022 first_block=156249358336 bytes=524288 bad=0 visits=1
+WINDOW segment=298023 first_block=156249882624 bytes=524288 bad=0 visits=1
+WINDOW segment=298024 first_block=156250406912 bytes=524288 bad=0 visits=1
+WINDOW segment=317890 first_block=166665912320 bytes=524288 bad=0 visits=1
+WINDOW segment=317891 first_block=166666436608 bytes=524288 bad=0 visits=1
+WINDOW segment=317892 first_block=166666960896 bytes=524288 bad=0 visits=1
+WINDOW segment=337758 first_block=177082466304 bytes=524288 bad=0 visits=1
+WINDOW segment=337759 first_block=177082990592 bytes=524288 bad=0 visits=1
+WINDOW segment=337760 first_block=177083514880 bytes=524288 bad=0 visits=1
+WINDOW segment=357626 first_block=187499020288 bytes=524288 bad=0 visits=1
+WINDOW segment=357627 first_block=187499544576 bytes=524288 bad=0 visits=1
+WINDOW segment=357628 first_block=187500068864 bytes=524288 bad=0 visits=1
+WINDOW segment=377495 first_block=197916098560 bytes=524288 bad=0 visits=1
+WINDOW segment=377496 first_block=197916622848 bytes=524288 bad=0 visits=1
+WINDOW segment=377497 first_block=197917147136 bytes=524288 bad=0 visits=1
+WINDOW segment=397363 first_block=208332652544 bytes=524288 bad=0 visits=1
+WINDOW segment=397364 first_block=208333176832 bytes=524288 bad=0 visits=1
+WINDOW segment=397365 first_block=208333701120 bytes=524288 bad=0 visits=1
+WINDOW segment=417231 first_block=218749206528 bytes=524288 bad=0 visits=1
+WINDOW segment=417232 first_block=218749730816 bytes=524288 bad=0 visits=1
+WINDOW segment=417233 first_block=218750255104 bytes=524288 bad=0 visits=1
+WINDOW segment=437099 first_block=229165760512 bytes=524288 bad=0 visits=1
+WINDOW segment=437100 first_block=229166284800 bytes=524288 bad=0 visits=1
+WINDOW segment=437101 first_block=229166809088 bytes=524288 bad=0 visits=1
+WINDOW segment=456968 first_block=239582838784 bytes=524288 bad=0 visits=1
+WINDOW segment=456969 first_block=239583363072 bytes=524288 bad=0 visits=1
+WINDOW segment=456970 first_block=239583887360 bytes=524288 bad=0 visits=1
+WINDOW segment=476836 first_block=249999392768 bytes=524288 bad=0 visits=1
+WINDOW segment=476837 first_block=249999917056 bytes=524288 bad=0 visits=1
+WINDOW segment=476838 first_block=250000441344 bytes=524288 bad=0 visits=1
+WINDOW segment=496704 first_block=260415946752 bytes=524288 bad=0 visits=1
+WINDOW segment=496705 first_block=260416471040 bytes=524288 bad=0 visits=1
+WINDOW segment=496706 first_block=260416995328 bytes=524288 bad=0 visits=1
+WINDOW segment=516572 first_block=270832500736 bytes=524288 bad=0 visits=1
+WINDOW segment=516573 first_block=270833025024 bytes=524288 bad=0 visits=1
+WINDOW segment=516574 first_block=270833549312 bytes=524288 bad=0 visits=1
+WINDOW segment=536440 first_block=281249054720 bytes=524288 bad=0 visits=1
+WINDOW segment=536441 first_block=281249579008 bytes=524288 bad=0 visits=1
+WINDOW segment=536442 first_block=281250103296 bytes=524288 bad=0 visits=1
+WINDOW segment=556309 first_block=291666132992 bytes=524288 bad=0 visits=1
+WINDOW segment=556310 first_block=291666657280 bytes=524288 bad=0 visits=1
+WINDOW segment=556311 first_block=291667181568 bytes=524288 bad=0 visits=1
+WINDOW segment=576177 first_block=302082686976 bytes=524288 bad=0 visits=1
+WINDOW segment=576178 first_block=302083211264 bytes=524288 bad=0 visits=1
+WINDOW segment=576179 first_block=302083735552 bytes=524288 bad=0 visits=1
+WINDOW segment=596045 first_block=312499240960 bytes=524288 bad=0 visits=1
+WINDOW segment=596046 first_block=312499765248 bytes=524288 bad=0 visits=1
+WINDOW segment=596047 first_block=312500289536 bytes=524288 bad=0 visits=1
+WINDOW segment=615913 first_block=322915794944 bytes=524288 bad=0 visits=1
+WINDOW segment=615914 first_block=322916319232 bytes=524288 bad=0 visits=1
+WINDOW segment=615915 first_block=322916843520 bytes=524288 bad=0 visits=1
+WINDOW segment=635781 first_block=333332348928 bytes=524288 bad=0 visits=1
+WINDOW segment=635782 first_block=333332873216 bytes=460118 bad=0 visits=1
+PASS: 103 independently checked sample windows at N=10000000000000; W30_bytes=53937494; represented_candidates=431499952; count=346065536839; oracle_root=3162277; count_checkpoint=pass; callback_segments=635783; bad_bytes=0; missing_or_repeated=0; engine_estimated_peak_bytes=133474717; actual_threads=8; tasks=32

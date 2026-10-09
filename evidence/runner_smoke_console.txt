@@ -1,0 +1,25 @@
+Results: results/20260910T022936Z_v35_6
+N=100000000 threads=2 segment_kib=512 pairs=2 reference=v34
+PASS: 133 original plus 24 calendar-specific full-bitmap cases through 100000007; queued_cases=8 memory_fallback_cases=0.
+PASS: 133 original plus 24 calendar-specific full-bitmap cases through 100000007; queued_cases=8 memory_fallback_cases=0.
+PASS: 24 additional full-bitmap cases: plain/blocked, 16/32/64 KiB tiles, both calendar bounds, threads 1/3, geometry boundary.
+Checking a high-range tail window against an independent ordinary bitmap oracle...
+{"engine":"v35","N":100000000,"first_segment":0,"segments":7,"segment_bytes":524288,"threads":2,"bitmap_survivors":5761452,"total_seconds":0.121521894,"prepare_seconds":0.002672063,"work_seconds":0.118589055,"calendar_bytes":0,"slots":1,"cofactor_mode":1,"block_shift":0,"cofactor_bytes":76888,"row_prime_bytes":76856,"dense_tile_bytes":16384,"oracle_enabled":1,"checked_bytes":3333334,"bad_bytes":0}
+Running N=100000000 warmup pair=-1 position=1 v35...
+warmup,-1,1,v35,0.006490246,5761455,512
+Running N=100000000 warmup pair=-1 position=2 v34...
+warmup,-1,2,v34,0.006431098,5761455,512
+Running N=100000000 measured pair=0 position=1 v35...
+measured,0,1,v35,0.009231362,5761455,512
+Running N=100000000 measured pair=0 position=2 v34...
+measured,0,2,v34,0.010068824,5761455,512
+Running N=100000000 measured pair=1 position=1 v34...
+measured,1,1,v34,0.006207116,5761455,512
+Running N=100000000 measured pair=1 position=2 v35...
+measured,1,2,v35,0.006254036,5761455,512
+MEDIANS v35=0.007742699 v34=0.008137970 seconds
+PAIRED v35_over_v34=0.962192651 time_reduction_pct=+3.780735 v35_wins=1/2
+Warmups excluded; all measured runs retained; separate processes and internal elapsed times.
+This is a configuration-specific experiment, not a universal speed or confidence-interval claim.
+COMPLETE: every count matched 5761455.
+Upload: results/20260910T022936Z_v35_6.zip
